@@ -7,8 +7,19 @@ class SearchStarWars extends Component {
     this.state = {
       apiResults: [],
       searchName: '',
-      matchingNames: []
+      matchingNames: [],
+      loading: false
     };
+  }
+
+  displayLoader() {
+    let loader;
+    if (this.state.loading) 
+    {
+      loader = <div className="loader"></div>
+    }
+
+    return loader;
   }
 
   sortResults() {
@@ -20,7 +31,8 @@ class SearchStarWars extends Component {
     
     this.setState(
       {
-        matchingNames: myMatchingNames
+        matchingNames: myMatchingNames,
+        loading: false
       }
     );
   }
@@ -87,7 +99,8 @@ class SearchStarWars extends Component {
     this.setState (
     {
       apiResults: [],
-      matchingNames: []
+      matchingNames: [],
+      loading: true
     });
     const baseURL = 'https://swapi.co/api/';    
     this.fetchResults(`${baseURL}people/`);
@@ -95,26 +108,27 @@ class SearchStarWars extends Component {
 
   render() {
     return (
-      < >
-      <form className='searchForm' onSubmit={event => this.handleSubmit(event)}>
-        <fieldset>
-          <legend>Name Search</legend>
-          <input
-            type="text"
-            name="name"
-            id="search"
-            placeholder="Search Name"
-            value={this.state.searchName}
-            onChange={event => this.onChangeInput(event.target.value)}
-          />
-          <div className="searchname__buttons">
-            <button onClick={event => this.handleReset(event)}>Reset</button>
-            <button type="submit">Submit</button>
-          </div>
-        </fieldset>
-      </form>
-        { this.displayResults() }
-      </ >
+      <section className="mainPage">
+        <form className='searchForm' onSubmit={event => this.handleSubmit(event)}>
+          <fieldset>
+            <legend>Name Search</legend>
+            <input
+              type="text"
+              name="name"
+              id="search"
+              placeholder="Search Name"
+              value={this.state.searchName}
+              onChange={event => this.onChangeInput(event.target.value)}
+            />
+            <div className="searchname__buttons">
+              <button onClick={event => this.handleReset(event)}>Reset</button>
+              <button type="submit">Submit</button>
+            </div>
+          </fieldset>
+        </form>
+      { this.displayLoader() }
+      { this.displayResults() }
+      </section>
     );
   }
 }
