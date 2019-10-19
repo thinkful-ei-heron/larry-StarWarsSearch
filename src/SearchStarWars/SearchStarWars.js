@@ -24,9 +24,9 @@ class SearchStarWars extends Component {
 
   sortResults() {
     let myMatchingNames = this.state.matchingNames;
+    let regex = new RegExp(this.state.searchName, 'i');
     this.state.apiResults.forEach(result => {
-      let found = result.name.match(this.state.searchName);
-      if (found) myMatchingNames.push(result.name);
+      if (result.name.match(regex)) myMatchingNames.push(result.name);
     });
     
     this.setState(
@@ -39,17 +39,24 @@ class SearchStarWars extends Component {
 
   displayResults() {
     const results = this.state.matchingNames.map((name, i) => 
-      <li key={i}>Match {i + 1}: { name }</li>);
-    return (
-      <ul>
-        { results }
-      </ul>
-    );
+      <li key={i}>{ name }</li>);
+    if (results.length > 0) {
+      return (
+      <div>
+        <h2>Names Matching { this.state.searchName }</h2>
+        <ul>
+          { results }
+        </ul>
+      </div>
+      );
+    }
+    return (<></>);
   }
 
   onChangeInput(name) {
     const newState = this.state;
     newState.searchName = name;
+    newState.matchingNames = [];
 
     this.setState(
       { newState }
@@ -111,7 +118,7 @@ class SearchStarWars extends Component {
       <section className="mainPage">
         <form className='searchForm' onSubmit={event => this.handleSubmit(event)}>
           <fieldset>
-            <legend>Name Search</legend>
+            <legend>Search</legend>
             <input
               type="text"
               name="name"
