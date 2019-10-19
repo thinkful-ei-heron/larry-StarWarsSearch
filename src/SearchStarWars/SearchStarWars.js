@@ -5,9 +5,34 @@ class SearchStarWars extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      results: [],
-      searchName: ''
+      apiResults: [],
+      searchName: '',
+      matchingNames: []
     };
+  }
+
+  sortResults() {
+    let myMatchingNames = this.state.matchingNames;
+    this.state.apiResults.forEach(result => {
+      let found = result.name.match(this.state.searchName);
+      if (found) myMatchingNames.push(result.name);
+    });
+    
+    this.setState(
+      {
+        matchingNames: myMatchingNames
+      }
+    );
+  }
+
+  displayResults() {
+    const results = this.state.matchingNames.map((name, i) => 
+      <li key={i}>Match {i + 1}: { name }</li>);
+    return (
+      <ul>
+        { results }
+      </ul>
+    );
   }
 
   onChangeInput(name) {
@@ -40,17 +65,18 @@ class SearchStarWars extends Component {
     fetch(`${url}`, options)
       .then(res => res.json())
       .then(resJson => {
-        let myResults = this.state.results;
+        let myResults = this.state.apiResults;
         resJson.results.forEach(result => {
           myResults.push(result);
         });
         this.setState({
-          results: myResults
+          apiResults: myResults
         });
         
         if (resJson.next) {
           this.fetchResults(resJson.next);
         }
+        else (this.sortResults());
       })
       .catch(e => console.log(`Error: ${e.message}`)
     );
@@ -58,13 +84,18 @@ class SearchStarWars extends Component {
   
   handleSubmit(event) {
     event.preventDefault();
-    console.log(`Name is ${this.state.searchName}`);
+    this.setState (
+    {
+      apiResults: [],
+      matchingNames: []
+    });
     const baseURL = 'https://swapi.co/api/';    
     this.fetchResults(`${baseURL}people/`);
   }
 
   render() {
     return (
+      < >
       <form className='searchForm' onSubmit={event => this.handleSubmit(event)}>
         <fieldset>
           <legend>Name Search</legend>
@@ -82,6 +113,8 @@ class SearchStarWars extends Component {
           </div>
         </fieldset>
       </form>
+        { this.displayResults() }
+      </ >
     );
   }
 }

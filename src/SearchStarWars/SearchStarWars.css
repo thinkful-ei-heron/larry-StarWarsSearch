@@ -19,3 +19,9 @@ form input {
 .searchname__buttons {
   margin-top: 20px;
 }
+
+li {
+  margin-top: 15px;
+  font-size: 20px;
+  list-style: none;
+}
