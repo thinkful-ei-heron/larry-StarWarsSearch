@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import SearchStarWars from './SearchStarWars/SearchStarWars';
 
 class App extends Component {
 
@@ -13,7 +14,8 @@ class App extends Component {
   render() {
     return (
       <main className='App'>
-        <h1>Star Wars Search</h1>
+        <h1>Star Wars Database</h1>
+        <SearchStarWars />
       </main>
     );
   }

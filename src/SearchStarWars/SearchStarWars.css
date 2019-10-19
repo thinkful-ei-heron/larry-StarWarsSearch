@@ -1,0 +1,21 @@
+fieldset {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  border-style: none;
+}
+
+legend {
+  text-align: center;
+  font-size: 20px;
+}
+
+form input {
+  width: 250px;
+}
+
+.searchname__buttons {
+  margin-top: 20px;
+}
