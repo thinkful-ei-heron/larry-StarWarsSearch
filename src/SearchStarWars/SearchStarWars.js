@@ -67,6 +67,7 @@ class SearchStarWars extends Component {
     event.preventDefault();
     const newState = this.state;
     newState.searchName = '';
+    newState.matchingNames = [];    
 
     this.setState (
       { newState }
