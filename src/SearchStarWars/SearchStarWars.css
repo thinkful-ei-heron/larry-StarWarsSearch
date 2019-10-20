@@ -5,6 +5,10 @@
   align-items: center;    
 }
 
+section h2 {
+  color: #FF9999;
+}
+
 fieldset {
   display: flex;
   flex-direction: column;
@@ -28,8 +32,8 @@ form input {
 }
 
 li {
-  margin-top: 15px;
-  font-size: 20px;
+  margin-top: 8px;
+  font-size: 18px;
   list-style: none;
 }
 

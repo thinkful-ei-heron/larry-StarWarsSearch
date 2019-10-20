@@ -5,9 +5,9 @@ class SearchStarWars extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      apiResults: [],
+      apiPeople: [],
       searchName: '',
-      matchingNames: [],
+      matchingIndices: [],
       loading: false
     };
   }
@@ -23,31 +23,46 @@ class SearchStarWars extends Component {
   }
 
   sortResults() {
-    let myMatchingNames = this.state.matchingNames;
+    let myMatchingIndices = this.state.matchingIndices;    
     let regex = new RegExp(this.state.searchName, 'i');
-    this.state.apiResults.forEach(result => {
-      if (result.name.match(regex)) myMatchingNames.push(result.name);
+    this.state.apiPeople.forEach((result, index) => {
+      if (result.name.match(regex)) {
+        myMatchingIndices.push(index);        
+      }
     });
     
     this.setState(
       {
-        matchingNames: myMatchingNames,
+        matchingIndices: myMatchingIndices,        
         loading: false
       }
     );
   }
 
   displayResults() {
-    const results = this.state.matchingNames.map((name, i) => 
-      <li key={i}>{ name }</li>);
+    const results = this.state.matchingIndices.map((index, i) => 
+      <>
+      <h2>- { this.state.apiPeople[index].name } -</h2>
+      <ul>
+        <li key={i}>
+          Birth Year: { this.state.apiPeople[index].birth_year }
+        </li>
+        <li key={i}>
+          Gender: { this.state.apiPeople[index].gender }
+        </li>
+        <li key={i}>
+          Height: { this.state.apiPeople[index].height }
+        </li>        
+      </ul>
+      </>);
     if (results.length > 0) {
       return (
-      <div>
-        <h2>Names Matching { this.state.searchName }</h2>
-        <ul>
-          { results }
-        </ul>
-      </div>
+      <>
+        <div>
+          <h2>Names Matching { this.state.searchName }</h2>
+            { results }
+        </div>      
+      </>
       );
     }
     return (<></>);
@@ -56,7 +71,7 @@ class SearchStarWars extends Component {
   onChangeInput(name) {
     const newState = this.state;
     newState.searchName = name;
-    newState.matchingNames = [];
+    newState.matchingIndices = [];    
 
     this.setState(
       { newState }
@@ -67,7 +82,7 @@ class SearchStarWars extends Component {
     event.preventDefault();
     const newState = this.state;
     newState.searchName = '';
-    newState.matchingNames = [];    
+    newState.matchingIndices = [];          
 
     this.setState (
       { newState }
@@ -85,12 +100,12 @@ class SearchStarWars extends Component {
     fetch(`${url}`, options)
       .then(res => res.json())
       .then(resJson => {
-        let myResults = this.state.apiResults;
+        let myResults = this.state.apiPeople;
         resJson.results.forEach(result => {
           myResults.push(result);
         });
         this.setState({
-          apiResults: myResults
+          apiPeople: myResults
         });
         
         if (resJson.next) {
@@ -106,8 +121,8 @@ class SearchStarWars extends Component {
     event.preventDefault();
     this.setState (
     {
-      apiResults: [],
-      matchingNames: [],
+      apiPeople: [],
+      matchingIndices: [],
       loading: true
     });
     const baseURL = 'https://swapi.co/api/';    
